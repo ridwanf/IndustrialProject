@@ -25,5 +25,17 @@ namespace Industrial.Wpf
         {
             InitializeComponent();
         }
+
+        private void ShowMenu(object sender, RoutedEventArgs e)
+        {
+
+            var flyout = menuFlyout;
+            if (flyout == null)
+            {
+                return;
+            }
+
+            flyout.IsOpen = !flyout.IsOpen;
+        }
     }
 }

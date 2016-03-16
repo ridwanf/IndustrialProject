@@ -1,25 +1,28 @@
-﻿<metro:MetroWindow  x:Class="Industrial.Wpf.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        Title="MainWindow" Height="600" Width="800" ResizeMode="NoResize"   
-                    BorderThickness="0" 
-                      GlowBrush="Black" >
+﻿<metro:MetroWindow x:Class="Industrial.Wpf.MainWindow"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                   Title="Main Window" Height="600" Width="800"
+                   TitleCaps="False"
+                   WindowStartupLocation="CenterScreen"
+                   GlowBrush="{DynamicResource AccentColorBrush}"
+                   ResizeMode="NoResize"
+                   NonActiveWindowTitleBrush="DarkGray">
     <metro:MetroWindow.RightWindowCommands>
         <metro:WindowCommands>
             <Button Content="settings" />
             <Button>
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20"
-                   Height="20"
-                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                               Height="20"
+                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
                         <!--<Rectangle.OpacityMask>
                             <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_cupcake}" />
                         </Rectangle.OpacityMask>-->
                     </Rectangle>
                     <TextBlock Margin="4 0 0 0"
-                   VerticalAlignment="Center"
-                   Text="deploy cupcakes" />
+                               VerticalAlignment="Center"
+                               Text="deploy cupcakes" />
                 </StackPanel>
             </Button>
         </metro:WindowCommands>
@@ -27,20 +30,75 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/colors.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
-
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
+                <ResourceDictionary Source="/Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-
+    <metro:MetroWindow.Flyouts>
+        <metro:FlyoutsControl x:Name="flyoutsControl">
+            <metro:Flyout Header="Menu" Name="menuFlyout"
+                          Theme="Adapt"
+                          Position="Left">
+                <Grid>
+                    <Grid.Resources>
+                        <ResourceDictionary
+                            Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
+                    </Grid.Resources>
+                    <TabControl Margin="0, 10, 0, 0"
+                                TabStripPlacement="Left"
+                                Height="auto">
+                        <TabItem Header="Edit">
+                            <TabControl TabStripPlacement="Left">
+                                <TabItem Header="Cu_t" />
+                                <TabItem Header="_Copy" />
+                                <TabItem Header="_Paste" />
+                            </TabControl>
+                        </TabItem>
+                        <TabItem Header="Window">
+                            <TabControl TabStripPlacement="Left">
+                                <TabItem Header="Cascade" />
+                                <TabItem Header="Tile Horizontally" />
+                                <TabItem Header="Tile Veritcally" />
+                                <TabItem Header="Close All" />
+                            </TabControl>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </metro:Flyout>
+        </metro:FlyoutsControl>
+    </metro:MetroWindow.Flyouts>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
+        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0">
+            <Button Width="55" Click="ShowMenu"
+                    Height="55"
+                    VerticalAlignment="Top"
+                    Style="{DynamicResource MetroCircleButtonStyle}" Margin="72,0">
+                <Rectangle Width="20" Height="20">
+                    <Rectangle.Fill>
+                        <VisualBrush Stretch="Fill"
+            				Visual="{StaticResource appbar_book_list}" />
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Button>
+            <TextBlock HorizontalAlignment="Center"
+                       Text="Menu" />
+        </StackPanel>
+
+        <ContentPresenter Grid.Column="0" Grid.Row="1" x:Name="MainArea" />
+        <StatusBar Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,0,0">
+            <StatusBarItem>ScoreKeeper</StatusBarItem>
+            <Separator Style="{StaticResource MetroStatusBarSeparator}" />
+            <StatusBarItem>Some Status Message</StatusBarItem>
+        </StatusBar>
     </Grid>
 </metro:MetroWindow>
