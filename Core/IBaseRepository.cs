@@ -9,7 +9,7 @@ namespace Core
     {
         IQueryable<T> FindBy(Expression<Func<T, bool>> predicate);
         IQueryable<T> FindAll(params Expression<Func<T, object>>[] includeProperties);
-        IEnumerable<T> FindAll(Expression<Func<T, bool>> predicate,
+        IQueryable<T> FindAll(Expression<Func<T, bool>> predicate,
             params Expression<Func<T, object>>[] includeProperties);
         T Add(T entity);
         T Update(T entity);

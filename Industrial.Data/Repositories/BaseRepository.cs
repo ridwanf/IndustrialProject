@@ -56,7 +56,7 @@ namespace Industrial.Data.Repositories
         ///     x.SomeCollection, x => x.SomeOtherCollection.
         /// </param>
         /// <returns>An IEnumerable of the requested type T.</returns>
-        public IEnumerable<T> FindAll(Expression<Func<T, bool>> predicate,
+        public IQueryable<T> FindAll(Expression<Func<T, bool>> predicate,
             params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> items = DataContextFactory.GetDataContext().Set<T>();
