@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
-using AutoMapper;
 using Core;
 using Industrial.Data.Domain;
 using Industrial.Repository.Repositories;
@@ -48,12 +46,10 @@ namespace Industrial.Service.Services
         }
         public ItemProductModel FindById(int id)
         {
-            var data = new ItemProductModel();
-            ItemProduct result = _itemRepository.FindBy(a => a.Id == id).First();
+            var result = _itemRepository.FindBy(a => a.Id == id).First();
             if (result != null)
             {
-                Mapper.Map(result, data);
-                return data;
+                return result.ConvertToModel();
             }
             return null;
         }
@@ -66,15 +62,14 @@ namespace Industrial.Service.Services
 
         private ItemProductModel Create(ItemProductModel item)
         {
-            var data = new ItemProduct();
-            Mapper.Map(item, data);
+           var data = item.ConvertToData();
             using (_unitOfWorkFactory.Create())
             {
                 _itemRepository.Add(data);
             }
 
-            Mapper.Map(data, item);
-            return item;
+           
+            return data.ConvertToModel();
         }
 
         public async Task<ItemProductModel> EditAsync(ItemProductModel item)
@@ -85,14 +80,12 @@ namespace Industrial.Service.Services
 
         public ItemProductModel Edit(ItemProductModel item)
         {
-            var data = new ItemProduct();
-            Mapper.Map(item, data);
+            var data = item.ConvertToData();
             using (_unitOfWorkFactory.Create())
             {
                 _itemRepository.Update(data);
             }
-            Mapper.Map(data, item);
-            return item;
+            return data.ConvertToModel();
         }
 
         public async Task<ItemProductModel> DeleteAsync(int id)
@@ -104,14 +97,16 @@ namespace Industrial.Service.Services
         public ItemProductModel Delete(int id)
         {
             var item = _itemRepository.FindBy(a => a.Id == id).FirstOrDefault();
-            var itemView = new ItemProductModel();
             if (item == null)
                 return null;
             else
             {
-                _itemRepository.SoftDelete(item);
-                Mapper.Map(item, itemView);
-                return itemView;
+                using (_unitOfWorkFactory.Create())
+                {
+                    _itemRepository.SoftDelete(item);
+                    
+                }
+                return item.ConvertToModel();
             }
         }
     }

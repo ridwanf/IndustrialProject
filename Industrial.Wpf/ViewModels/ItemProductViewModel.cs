@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Media;
 using System.Security.AccessControl;
+using System.Windows;
 using Core;
 using Core.Common.UI;
 using Industrial.Data.Repositories;
@@ -10,15 +12,18 @@ using Industrial.Repository.Repositories;
 using Industrial.Service.Services;
 using Industrial.Service.ViewModel.Master;
 using Industrial.Wpf.Infrastructures;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace Industrial.Wpf.ViewModels
 {
     public class ItemProductViewModel : BindableBase
     {
         public IItemProductService _Service = new ItemProductService();
+        private IDialogService _dialogService;
         private ObservableCollection<ItemProductModel> _items;
         private AddEditItemViewModel _currentItem;
-
+        private List<ItemProductModel> _allItems;
 
         public RelayCommand NewItem { get; private set; }
         public RelayCommand<ItemProductModel> EditItemCommand { get; private set; }
@@ -26,14 +31,16 @@ namespace Industrial.Wpf.ViewModels
         public RelayCommand AddItemCommand { get; private set; }
         public RelayCommand TestAlert { get; private set; }
 
-        public event Action<ItemProductModel> AddCustomerRequested = delegate { };
-        public event Action<ItemProductModel> EditCustomerRequested = delegate { };
-        public event Action<ItemProductModel> DeleteCustomerRequested = delegate { }; 
+        public event Action<ItemProductModel> AddItemRequested = delegate { };
+        public event Action<ItemProductModel> EditItemRequested = delegate { };
+        public event Action<ItemProductModel> DeleteItemRequested = delegate { };
+        public event CancelEventHandler ConfirmDelete;
 
 
         public ItemProductViewModel(IItemProductService service)
         {
             _Service = service;
+            _dialogService = new DialogService(new MetroWindow());
             EditItemCommand = new RelayCommand<ItemProductModel>(OnEditCommand);
             DeleteItemCommand = new RelayCommand<ItemProductModel>(OnDeleteCommand);
             AddItemCommand = new RelayCommand(OnAddCommand);
@@ -41,31 +48,31 @@ namespace Industrial.Wpf.ViewModels
 
         private void OnAddCommand()
         {
-            ItemProductModel item = new ItemProductModel();
-            CurrentItem = new AddEditItemViewModel(_Service,item);
-            CurrentItem.ItemProduct = item;
-            CurrentItem.EditMode = false;
+            AddItemRequested(new ItemProductModel() { Id = 0, IsActive = true, CreatedDate = DateTime.Now });
         }
 
-        private void OnDeleteCommand(ItemProductModel obj)
+        private async void OnDeleteCommand(ItemProductModel obj)
         {
-            throw new System.NotImplementedException();
+            var metroWindow = (MetroWindow)Application.Current.MainWindow;
+            var result = await metroWindow.ShowMessageAsync("Delete Item",
+                "Are you sure you want to delete this record");
+            if (result == MessageDialogResult.Affirmative)
+            {
+                _Service.DeleteAsync(obj.Id);
+                _items.Remove(obj);
+            }
         }
 
         private void OnEditCommand(ItemProductModel obj)
         {
-            if (obj!=null)
-            {
-                CurrentItem = new AddEditItemViewModel(_Service,obj);
-                CurrentItem.EditMode = true;
-            }
+            EditItemRequested(obj);
         }
 
 
         public ObservableCollection<ItemProductModel> Items
         {
             get { return _items; }
-            set { SetProperty(ref _items,value); }
+            set { SetProperty(ref _items, value); }
         }
 
 
@@ -75,14 +82,14 @@ namespace Industrial.Wpf.ViewModels
             {
                 return;
             }
-
-            Items = new ObservableCollection<ItemProductModel>(await _Service.GetAllAsync());
+            _allItems = await _Service.GetAllAsync();
+            Items = new ObservableCollection<ItemProductModel>(_allItems);
         }
 
         public AddEditItemViewModel CurrentItem
         {
             get { return _currentItem; }
-            set { SetProperty(ref _currentItem,value); }
+            set { SetProperty(ref _currentItem, value); }
         }
 
         //public ItemProductViewModel(ObservableCollection<ItemProductModel> items,

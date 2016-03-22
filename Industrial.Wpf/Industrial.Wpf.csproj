@@ -82,6 +82,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Infrastructures\DialogService.cs" />
     <Compile Include="ViewModels\AddEditItemViewModel.cs" />
     <Compile Include="ViewModels\ItemProductViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />

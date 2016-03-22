@@ -12,17 +12,9 @@ namespace Industrial.Wpf.ViewModels
         private bool _editMode;
         private ItemProductModel _itemProduct;
 
-        public AddEditItemViewModel(IItemProductService service, ItemProductModel itemProductModel)
+        public AddEditItemViewModel(IItemProductService service)
         {
             _service = service;
-            _itemProduct = new ItemProductModel()
-            {
-                Description = itemProductModel.Description,
-                Id = itemProductModel.Id,
-                Name = itemProductModel.Name,
-                Quantity = itemProductModel.Quantity,
-                Price = itemProductModel.Price
-            };
             CancelCommand = new RelayCommand(OnCancel);
             SaveCommand = new RelayCommand(OnSave, CanSave);
         }
@@ -59,16 +51,23 @@ namespace Industrial.Wpf.ViewModels
                 await _service.EditAsync(_itemProduct);
             }
             else
+                
             {
+                _itemProduct.CreatedDate = DateTime.Now;
+                _itemProduct.IsActive = true;
                 await _service.CreateAsync(_itemProduct);
             }
+            Done();
         }
 
         private void UpdateItem(ItemProductModel source, ItemProductModel target)
         {
             target.Quantity = source.Quantity;
+            target.CreatedDate = source.CreatedDate;
             target.Price = source.Price;
             target.Name = source.Name;
+            target.Description = source.Description;
+            target.IsActive = source.IsActive;
             target.Id = source.Id;
         }
 
@@ -78,9 +77,11 @@ namespace Industrial.Wpf.ViewModels
             if (EditMode)
             {
                 target.Quantity = source.Quantity;
+                target.CreatedDate = source.CreatedDate;
                 target.Price = source.Price;
                 target.Name = source.Name;
-                target.Id = source.Id;
+                target.Description = source.Description;
+                target.IsActive = source.IsActive;
             }
         }
 

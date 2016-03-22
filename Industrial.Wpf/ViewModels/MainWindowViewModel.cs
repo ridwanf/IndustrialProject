@@ -8,7 +8,7 @@ namespace Industrial.Wpf.ViewModels
     public class MainWindowViewModel:BindableBase
     {
         private ItemProductViewModel _itemProductViewModel;
-        
+        private AddEditItemViewModel _addEditItemViewModel;
         
         public RelayCommand<string> NavCommand { get; private set; }
 
@@ -19,9 +19,31 @@ namespace Industrial.Wpf.ViewModels
         {
             NavCommand = new RelayCommand<string>(OnNav);
             _itemProductViewModel = ContainerHelper.Container.Resolve<ItemProductViewModel>();
+            _addEditItemViewModel = ContainerHelper.Container.Resolve<AddEditItemViewModel>();
+
+            _itemProductViewModel.EditItemRequested += NavToEditItem;
+            _itemProductViewModel.AddItemRequested += NavToAddItem;
+            _addEditItemViewModel.Done += NavToItemList;
         }
 
-      
+        private void NavToItemList()
+        {
+            CurrentViewModel = _itemProductViewModel;
+        }
+
+        private void NavToAddItem(ItemProductModel obj)
+        {
+            _addEditItemViewModel.EditMode = false;
+            _addEditItemViewModel.SetItem(obj);
+            CurrentViewModel = _addEditItemViewModel;
+        }
+
+        private void NavToEditItem(ItemProductModel obj)
+        {
+            _addEditItemViewModel.EditMode = true;
+            _addEditItemViewModel.SetItem(obj);
+            CurrentViewModel = _addEditItemViewModel;
+        }
 
 
         public BindableBase CurrentViewModel
