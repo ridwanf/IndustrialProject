@@ -34,6 +34,7 @@ namespace Industrial.Wpf.ViewModels
         private void NavToAddItem(ItemProductModel obj)
         {
             _addEditItemViewModel.EditMode = false;
+            _addEditItemViewModel.Title = "Add Item";
             _addEditItemViewModel.SetItem(obj);
             CurrentViewModel = _addEditItemViewModel;
         }
@@ -41,6 +42,7 @@ namespace Industrial.Wpf.ViewModels
         private void NavToEditItem(ItemProductModel obj)
         {
             _addEditItemViewModel.EditMode = true;
+            _addEditItemViewModel.Title = "Edit Item";
             _addEditItemViewModel.SetItem(obj);
             CurrentViewModel = _addEditItemViewModel;
         }
@@ -67,6 +69,11 @@ namespace Industrial.Wpf.ViewModels
                     break;
 
             }
+        }
+
+        public override string ViewTitle
+        {
+            get { return "Your Desktop"; }
         }
     }
 }

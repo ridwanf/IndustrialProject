@@ -4,10 +4,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:ui="clr-namespace:Core.Common.UI;assembly=Core.Common.UI"
-    xmlns:Master="clr-namespace:Industrial.Service.ViewModel.Master;assembly=Industrial.Service"
     x:Class="Industrial.Wpf.Views.ItemProductView"
     mc:Ignorable="d"
     Height="600" Width="1024"
@@ -18,35 +15,45 @@
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="5"> 
+        <StackPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Label Content="{Binding ViewTitle}"
+                   Style="{DynamicResource DescriptionHeaderStyle}" />
+        </StackPanel>
+        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5">
             <Button Content="Add Item"
-				Command="{Binding AddItemCommand}"
-				HorizontalAlignment="Left"/>
+                    Style="{DynamicResource AccentedSquareButtonStyle}"
+                    controls:ButtonHelper.PreserveTextCase="True"
+                    Margin="5"
+                    Width="80"
+                    Command="{Binding AddItemCommand}"
+                    HorizontalAlignment="Left" />
         </Grid>
         <!--grid-->
         <DataGrid x:Name="GridItemProduct"
-			Grid.Column="0"
-			Grid.Row="1"
-			TextOptions.TextFormattingMode="Display"
-			RenderOptions.ClearTypeHint="Enabled"
-			HeadersVisibility="Column"
-			CanUserAddRows="False"
-			Margin="5"
-			ItemsSource="{Binding Items}"
-			SelectionUnit="FullRow"
-			IsReadOnly="True"
-			AutoGenerateColumns="False">
+                  Grid.Column="0"
+                  Grid.Row="2"
+                  TextOptions.TextFormattingMode="Display"
+                  RenderOptions.ClearTypeHint="Enabled"
+                  HeadersVisibility="Column"
+                  CanUserAddRows="False"
+                  Margin="5"
+                  ItemsSource="{Binding Items}"
+                  SelectionUnit="FullRow"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Width="Auto" Header="Insert">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="Edit"
-								Command="{Binding DataContext.EditItemCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
-								CommandParameter="{Binding}"
-								Margin="5" />
+                                    Command="{Binding DataContext.EditItemCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                    Style="{DynamicResource SquareButtonStyle}"
+                                    CommandParameter="{Binding}"
+                                    Margin="5" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -55,9 +62,10 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="Delete"
-								Command="{Binding DataContext.DeleteItemCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
-								CommandParameter="{Binding}"
-								Margin="5" />
+                                    Command="{Binding DataContext.DeleteItemCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                    Style="{DynamicResource SquareButtonStyle}"
+                                    CommandParameter="{Binding}"
+                                    Margin="5" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -69,9 +77,9 @@
             </DataGrid.Columns>
             <DataGrid.Style>
                 <Style BasedOn="{StaticResource MetroDataGrid}"
-					TargetType="{x:Type DataGrid}">
+                       TargetType="{x:Type DataGrid}">
                     <Setter Property="AlternatingRowBackground"
-						Value="{DynamicResource GrayBrush10}" />
+                            Value="{DynamicResource GrayBrush10}" />
                 </Style>
             </DataGrid.Style>
         </DataGrid>

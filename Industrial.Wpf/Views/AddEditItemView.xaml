@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:Master="clr-namespace:Industrial.Service.ViewModel.Master;assembly=Industrial.Service" x:Class="Industrial.Wpf.Views.AddEditItemView" 
+             xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:Master="clr-namespace:Industrial.Service.ViewModel.Master;assembly=Industrial.Service" 
+            x:Class="Industrial.Wpf.Views.AddEditItemView" 
              mc:Ignorable="d">
     <UserControl.Resources>
         <Style TargetType="TextBox">
@@ -16,13 +18,18 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    <Grid>
+    <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid x:Name="grid1" Grid.Row="0" VerticalAlignment="Top" Margin="10,10,10,10" HorizontalAlignment="Left" DataContext="{Binding ItemProduct}">
+        <StackPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Label Content="{Binding ViewTitle}"
+                       Style="{DynamicResource DescriptionHeaderStyle}" />
+        </StackPanel>
+        <Grid x:Name="grid1" Grid.Row="1" VerticalAlignment="Top" Margin="10,10,10,10" HorizontalAlignment="Left" DataContext="{Binding ItemProduct}">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -32,18 +39,31 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Label VerticalAlignment="Center" Grid.Row="0" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Description:"/>
-            <TextBox x:Name="descriptionTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Description, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="0" Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1"/>
-            <Label VerticalAlignment="Center" Grid.Row="1" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Name:"/>
-            <TextBox x:Name="nameTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Name, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="1" Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1"/>
+            <Label VerticalAlignment="Center" Grid.Row="0" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Name:"/>
+            <TextBox x:Name="nameTextBox" Style="{DynamicResource InputTextStyle}"
+                      
+                     Text="{Binding Name, ValidatesOnDataErrors=True}"
+                     metro:TextBoxHelper.Watermark="Name"
+                     Grid.Row="0" Margin="3"
+                     HorizontalAlignment="Left" Grid.Column="1"/>
+            <Label VerticalAlignment="Center" Grid.Row="1" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Description:"/>
+            <TextBox x:Name="descriptionTextBox"  Style="{DynamicResource InputTextStyle}"  
+                           Text="{Binding Description ,ValidatesOnDataErrors=True}"
+                     Grid.Row="1" Margin="3"
+                      metro:TextBoxHelper.Watermark="Description"
+                     metro:TextBoxHelper.UseFloatingWatermark="True"
+                     HorizontalAlignment="Left" Grid.Column="1">
+            </TextBox>
             <Label VerticalAlignment="Center" Grid.Row="2" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Price:"/>
-            <TextBox x:Name="priceTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Price, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="2" Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1"/>
+            <TextBox x:Name="priceTextBox"  Style="{DynamicResource InputTextStyle}"  
+                     Text="{Binding Price, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Margin="3" TextAlignment="Right"  Grid.Column="1"/>
             <Label VerticalAlignment="Center" Grid.Row="3" Margin="3" HorizontalAlignment="Left" Grid.Column="0" Content="Quantity:"/>
-            <TextBox x:Name="quantityTextBox" Width="120" VerticalAlignment="Center" Text="{Binding Quantity, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="3" Margin="3" Height="23" HorizontalAlignment="Left" Grid.Column="1"/>
+            <TextBox x:Name="quantityTextBox"  Style="{DynamicResource InputTextStyle}"  Text="{Binding Quantity,  ValidatesOnDataErrors=True}" Grid.Row="3" Margin="3" TextAlignment="Right" Grid.Column="1"/>
+            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Grid.ColumnSpan="2">
+                <Button Content="Save" Margin="5" Command="{Binding SaveCommand}"   Style="{DynamicResource SquareButtonStyle}" Width="80" metro:ButtonHelper.PreserveTextCase="True"></Button>
+                <Button Content="Cancel" Margin="5" Command="{Binding CancelCommand}"   Style="{DynamicResource SquareButtonStyle}" Width="80"  metro:ButtonHelper.PreserveTextCase="True"></Button>
+            </StackPanel>
         </Grid>
-    <StackPanel Grid.Row="1" Orientation="Horizontal" >
-            <Button Content="Save" Margin="5" Command="{Binding SaveCommand}"></Button>
-            <Button Content="Cancel" Margin="5" Command="{Binding CancelCommand}"></Button>
-        </StackPanel>
+    
     </Grid>
 </UserControl>

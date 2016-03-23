@@ -11,6 +11,7 @@ namespace Industrial.Wpf.ViewModels
         private readonly IItemProductService _service;
         private bool _editMode;
         private ItemProductModel _itemProduct;
+        private string _title;
 
         public AddEditItemViewModel(IItemProductService service)
         {
@@ -46,18 +47,27 @@ namespace Industrial.Wpf.ViewModels
         private async void OnSave()
         {
             UpdateItem(ItemProduct, _itemProduct);
-            if (EditMode)
+            if (!_itemProduct.HasErrors)
             {
-                await _service.EditAsync(_itemProduct);
+                if (EditMode)
+                {
+                    await _service.EditAsync(_itemProduct);
+                }
+                else
+                {
+                    _itemProduct.CreatedDate = DateTime.Now;
+                    _itemProduct.IsActive = true;
+                    await _service.CreateAsync(_itemProduct);
+                }
+                Done();
+                
             }
             else
-                
             {
-                _itemProduct.CreatedDate = DateTime.Now;
-                _itemProduct.IsActive = true;
-                await _service.CreateAsync(_itemProduct);
+                _itemProduct.ErrorsChanged += RaiseCanExecuteChanged;
+                
             }
-            Done();
+     
         }
 
         private void UpdateItem(ItemProductModel source, ItemProductModel target)
@@ -102,6 +112,17 @@ namespace Industrial.Wpf.ViewModels
         private void OnCancel()
         {
             Done();
+        }
+
+        public string Title
+        {
+            get { return _title; }
+            set { SetProperty(ref _title,value); }
+        }
+
+        public override string ViewTitle
+        {
+            get { return Title; }
         }
     }
 }

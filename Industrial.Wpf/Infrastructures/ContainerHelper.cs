@@ -3,6 +3,7 @@ using Industrial.Data.Domain;
 using Industrial.Data.Repositories;
 using Industrial.Repository.Repositories;
 using Industrial.Service.Services;
+using MahApps.Metro.Controls;
 using Microsoft.Practices.Unity;
 
 namespace Industrial.Wpf.Infrastructures
@@ -24,7 +25,7 @@ namespace Industrial.Wpf.Infrastructures
                new ContainerControlledLifetimeManager());
             _container.RegisterType<MainDataContext, MainDataContext>(
              new ContainerControlledLifetimeManager());
-
+         
         }
 
         public static IUnityContainer Container

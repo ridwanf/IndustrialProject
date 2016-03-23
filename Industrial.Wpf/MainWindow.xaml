@@ -85,6 +85,7 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -101,10 +102,11 @@
                 </MenuItem>
 
             </Menu>
-            <ContentControl Grid.Row="1" x:Name="MainTabControl" Content="{Binding CurrentViewModel}" />
+       
+            <ContentControl Grid.Row="2" x:Name="MainTabControl" Content="{Binding CurrentViewModel}" Margin="5"/>
 
 
-            <StatusBar Grid.Row="2" Margin="0,0,0,0">
+            <StatusBar Grid.Row="3" Margin="0,0,0,0">
                 <StatusBarItem>ScoreKeeper</StatusBarItem>
                 <Separator Style="{StaticResource MetroStatusBarSeparator}" />
                 <StatusBarItem>Some Status Message</StatusBarItem>

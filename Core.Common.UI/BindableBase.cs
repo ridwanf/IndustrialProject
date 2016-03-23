@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace Core.Common.UI
@@ -35,6 +36,9 @@ namespace Core.Common.UI
             PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-
+        public virtual string ViewTitle
+        {
+            get { return String.Empty; }
+        }
     }
 }

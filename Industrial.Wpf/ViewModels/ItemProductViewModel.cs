@@ -40,7 +40,6 @@ namespace Industrial.Wpf.ViewModels
         public ItemProductViewModel(IItemProductService service)
         {
             _Service = service;
-            _dialogService = new DialogService(new MetroWindow());
             EditItemCommand = new RelayCommand<ItemProductModel>(OnEditCommand);
             DeleteItemCommand = new RelayCommand<ItemProductModel>(OnDeleteCommand);
             AddItemCommand = new RelayCommand(OnAddCommand);
@@ -53,9 +52,9 @@ namespace Industrial.Wpf.ViewModels
 
         private async void OnDeleteCommand(ItemProductModel obj)
         {
-            var metroWindow = (MetroWindow)Application.Current.MainWindow;
-            var result = await metroWindow.ShowMessageAsync("Delete Item",
-                "Are you sure you want to delete this record");
+            
+            var result = await DialogService.AskQuestionAsync("Delete Match",
+                "Are you sure you want to delete this Match record?");
             if (result == MessageDialogResult.Affirmative)
             {
                 _Service.DeleteAsync(obj.Id);
@@ -92,28 +91,13 @@ namespace Industrial.Wpf.ViewModels
             set { SetProperty(ref _currentItem, value); }
         }
 
-        //public ItemProductViewModel(ObservableCollection<ItemProductModel> items,
-        //    RelayCommand newItem,
-        //    RelayCommand editItem, ItemProductService service)
-        //{
-        //    NewItem = newItem;
-        //    EditItem = editItem;
 
-        //    _Service = service;
-        //    DeleteItem = new RelayCommand(DeleteSelectedItem, o => o != null);
-        //    Items = items;
-        //}
+        public override string ViewTitle
+        {
+            get {return "Item Product List"; }
+        }
 
 
-        //private void DeleteSelectedItem(object obj)
-        //{
-        //    if (MessageBox.Show("Are you sure you want to delete this Match record?",
-        //        "Delete Match",
-        //            MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-        //    {
-        //        Items.Remove(selectedItem);
-        //        SelectedItem = null;
-        //    }
-        //}
+        
     }
 }
